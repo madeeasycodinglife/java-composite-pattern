@@ -1,0 +1,113 @@
+**Java Composite Pattern: Treating Individual and Composite Objects Uniformly**
+
+The Composite Design Pattern allows you to treat individual objects and compositions of objects (composites) uniformly.
+It represents a tree structure of objects where both individual objects and composite objects are treated as "components."
+
+**Example:**
+
+Here's an example of a composite pattern in Java that represents a tree structure of departments and employees:
+
+   Company
+    /     \
+Development  Marketing
+ /     \         |
+Alice   Bob    Charlie
+
+In this representation:
+
+Company is a composite object that contains two department groups: Development and Marketing.
+Development and Marketing are also composite objects that contain individual employees: Alice, Bob, and Charlie.
+The composite pattern allows you to treat individual employees and groups of departments uniformly, as both
+implement the same Department interface and can be part of the hierarchical structure.
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+// Component Interface
+interface Department {
+    void printDepartmentInfo();
+}
+
+// Leaf (Individual Object)
+class Employee implements Department {
+    private String name;
+
+    public Employee(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void printDepartmentInfo() {
+        System.out.println("Employee: " + name);
+    }
+}
+
+// Composite (Group of Departments)
+class DepartmentGroup implements Department {
+    private String groupName;
+    private List<Department> departments = new ArrayList<>();
+
+    public DepartmentGroup(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public void addDepartment(Department department) {
+        departments.add(department);
+    }
+
+    @Override
+    public void printDepartmentInfo() {
+        System.out.println("Department Group: " + groupName);
+        for (Department department : departments) {
+            department.printDepartmentInfo();
+        }
+    }
+}
+
+// Client Code
+public class CompositePatternExample {
+    public static void main(String[] args) {
+        Employee employee1 = new Employee("Alice");
+        Employee employee2 = new Employee("Bob");
+        Employee employee3 = new Employee("Charlie");
+
+        DepartmentGroup developmentGroup = new DepartmentGroup("Development");
+        developmentGroup.addDepartment(employee1);
+        developmentGroup.addDepartment(employee2);
+
+        DepartmentGroup marketingGroup = new DepartmentGroup("Marketing");
+        marketingGroup.addDepartment(employee3);
+
+        DepartmentGroup company = new DepartmentGroup("Company");
+        company.addDepartment(developmentGroup);
+        company.addDepartment(marketingGroup);
+
+        company.printDepartmentInfo();
+    }
+}
+```
+
+**How to Identify When to Apply the Composite Design Pattern:**
+
+1. **Tree Structure:** When you have a hierarchical structure of objects where individual objects and compositions
+ of objects need to be treated uniformly.
+
+2. **Common Interface:** If you want to apply the same operations or methods to both individual objects and composites.
+
+3. **Component Relationship:** When you need to represent part-whole relationships between objects.
+
+**Where to Apply the Composite Design Pattern:**
+
+- **User Interfaces:** In graphical user interfaces where UI elements can be nested within others (e.g., widgets within panels).
+
+- **File System:** Representing files and directories in a file system as a tree structure.
+
+- **Organization Hierarchy:** Representing organizational hierarchies with employees, teams, departments, etc.
+
+- **Graphics Libraries:** Representing shapes, figures, or scenes where complex compositions can be built.
+
+- **Menu Systems:** Building hierarchical menu systems where menus and submenus can be nested.
+
+By applying the Composite Design Pattern, you can create flexible and extensible structures that allow you to build
+complex compositions from individual components, while treating them uniformly in terms of their interactions and behaviors.
